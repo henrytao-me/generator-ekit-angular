@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                 options: {
                     livereload: '<%= connect.options.livereload %>'
                 },
-                files: ['<%= yeoman.app %>/{,*/}*.html', '.tmp/styles/{,*/}*.css', '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js', '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}']
+                files: ['<%= yeoman.app %>/*.html', '<%= yeoman.app %>/views/{,*/}*.html', '.tmp/styles/{,*/}*.css', '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js', '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}']
             }
         },
         autoprefixer: {
