@@ -25,10 +25,14 @@ module.exports = function(grunt) {
                 files: ['test/spec/{,*/}*.coffee'],
                 tasks: ['coffee:test']
             },
-            compass: {
-                files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                tasks: ['compass:server', 'autoprefixer']
+            less: {
+                files: ['<%= yeoman.app %>/styles/{,*/}*.less'],
+                tasks: ['less', 'autoprefixer']
             },
+            // compass: {
+            //     files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+            //     tasks: ['compass:server', 'autoprefixer']
+            // },
             styles: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
                 tasks: ['copy:styles', 'autoprefixer']
@@ -116,27 +120,34 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        compass: {
-            options: {
-                sassDir: '<%= yeoman.app %>/styles',
-                cssDir: '.tmp/styles',
-                generatedImagesDir: '.tmp/images/generated',
-                imagesDir: '<%= yeoman.app %>/images',
-                javascriptsDir: '<%= yeoman.app %>/scripts',
-                fontsDir: '<%= yeoman.app %>/styles/fonts',
-                importPath: '<%= yeoman.app %>/bower_components',
-                httpImagesPath: '/images',
-                httpGeneratedImagesPath: '/images/generated',
-                httpFontsPath: '/styles/fonts',
-                relativeAssets: false
-            },
-            dist: {},
-            server: {
-                options: {
-                    debugInfo: true
+        less: {
+            styles: {
+                files: {
+                    '.tmp/styles/main.css': '<%= yeoman.app %>/styles/main.less'
                 }
             }
         },
+        // compass: {
+        //     options: {
+        //         sassDir: '<%= yeoman.app %>/styles',
+        //         cssDir: '.tmp/styles',
+        //         generatedImagesDir: '.tmp/images/generated',
+        //         imagesDir: '<%= yeoman.app %>/images',
+        //         javascriptsDir: '<%= yeoman.app %>/scripts',
+        //         fontsDir: '<%= yeoman.app %>/styles/fonts',
+        //         importPath: '<%= yeoman.app %>/bower_components',
+        //         httpImagesPath: '/images',
+        //         httpGeneratedImagesPath: '/images/generated',
+        //         httpFontsPath: '/styles/fonts',
+        //         relativeAssets: false
+        //     },
+        //     dist: {},
+        //     server: {
+        //         options: {
+        //             debugInfo: true
+        //         }
+        //     }
+        // },
         // not used since Uglify task does concat,
         // but still available if needed
         // concat: {
@@ -240,9 +251,12 @@ module.exports = function(grunt) {
             }
         },
         concurrent: {
-            server: ['coffee:dist', 'compass:server', 'copy:styles'],
-            test: ['coffee', 'compass', 'copy:styles'],
-            dist: ['coffee', 'compass:dist', 'copy:styles', 'imagemin', 'svgmin', 'htmlmin']
+            // server: ['coffee:dist', 'compass:server', 'copy:styles'],
+            // test: ['coffee', 'compass', 'copy:styles'],
+            // dist: ['coffee', 'compass:dist', 'copy:styles', 'imagemin', 'svgmin', 'htmlmin']
+            server: ['coffee:dist', 'less', 'copy:styles'],
+            test: ['coffee', 'less', 'copy:styles'],
+            dist: ['coffee', 'less', 'copy:styles', 'imagemin', 'svgmin', 'htmlmin']
         },
         karma: {
             unit: {
