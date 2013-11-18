@@ -52,13 +52,15 @@ module.exports = function(grunt) {
             },
             dev: {
                 options: {
-                    bases: ['.tmp', '<%= yeoman.app %>'],
-                    livereload: true,
+                    // static directory or watching directory
+                    bases: ['.tmp', '<%= yeoman.app %>'],                    
+                    livereload: 35730,
                     server: 'app.js'
                 }
             },
             dist: {
                 options: {
+                    // static directory or watching directory
                     bases: ['<%= yeoman.dist %>'],
                     server: 'app.js'
                 }
@@ -69,7 +71,7 @@ module.exports = function(grunt) {
                 NODE_ENV: 'development'
             },
             dist: {
-                NODE_ENV: 'production'  
+                NODE_ENV: 'production'
             }
         },
         open: {
@@ -77,32 +79,6 @@ module.exports = function(grunt) {
                 url: 'http://127.0.0.1:<%= express.options.port %>'
             }
         },
-        // connect: {
-        //     options: {
-        //         port: 9000,
-        //         // Change this to '0.0.0.0' to access the server from outside.
-        //         hostname: '0.0.0.0',
-        //         livereload: 35729
-        //     },
-        //     livereload: {
-        //         options: {
-        //             open: true,
-        //             base: ['.tmp', '<%= yeoman.app %>']
-        //         }
-        //     },
-        //     test: {
-        //         options: {
-        //             port: 9001,
-        //             base: ['.tmp', 'test', '<%= yeoman.app %>']
-        //         }
-        //     },
-        //     dist: {
-        //         options: {
-        //             base: '<%= yeoman.dist %>',
-        //             livereload: false
-        //         }
-        //     }
-        // },
         clean: {
             dist: {
                 files: [{
@@ -284,11 +260,9 @@ module.exports = function(grunt) {
     grunt.registerTask('server', function(target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'env:dist', 'express:dist', 'express-keepalive']);
-            // return grunt.task.run(['build', 'connect:dist:keepalive']);
         };
 
         grunt.task.run(['clean:server', 'concurrent:server', 'autoprefixer', 'env:dev', 'express:dev', 'open', 'watch']);
-        // grunt.task.run(['clean:server', 'concurrent:server', 'autoprefixer', 'connect:livereload', 'watch']);
     });
 
     grunt.registerTask('test', ['clean:server', 'concurrent:test', 'autoprefixer', 'connect:test', 'karma']);

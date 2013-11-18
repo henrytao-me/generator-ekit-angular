@@ -22,9 +22,6 @@ app.configure(function() {
 
 // Development Configuration
 app.configure('development', function() {
-    console.log('---------------aaaaaa');
-    console.log('---------------aaaaaa');
-    console.log('---------------aaaaaa');
     // app.use(express.static(path.join(__dirname, '.tmp')));
     // app.use(express.static(path.join(__dirname, 'app')));
     app.use(express.errorHandler());
@@ -32,9 +29,6 @@ app.configure('development', function() {
 
 // Production Configuration
 app.configure('production', function() {
-    console.log('---------------bbbbbbbb');
-    console.log('---------------bbbbbbbb');
-    console.log('---------------bbbbbbbb');
     // app.use(express.static(path.join(__dirname, 'dist')));
 });
 
