@@ -29,19 +29,9 @@ module.exports = function(grunt) {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.less'],
                 tasks: ['less', 'autoprefixer']
             },
-            // compass: {
-            //     files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-            //     tasks: ['compass:server', 'autoprefixer']
-            // },
             styles: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
                 tasks: ['copy:styles', 'autoprefixer']
-            },
-            livereload: {
-                options: {
-                    livereload: '<%= connect.options.livereload %>'
-                },
-                files: ['<%= yeoman.app %>/*.html', '<%= yeoman.app %>/views/{,*/}*.html', '.tmp/styles/{,*/}*.css', '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js', '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}']
             }
         },
         autoprefixer: {
@@ -55,32 +45,64 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        connect: {
+        express: {
             options: {
-                port: 9000,
-                // Change this to '0.0.0.0' to access the server from outside.
-                hostname: '0.0.0.0',
-                livereload: 35729
+                hostname: '*',
+                port: 9000
             },
-            livereload: {
+            dev: {
                 options: {
-                    open: true,
-                    base: ['.tmp', '<%= yeoman.app %>']
-                }
-            },
-            test: {
-                options: {
-                    port: 9001,
-                    base: ['.tmp', 'test', '<%= yeoman.app %>']
+                    bases: ['.tmp', '<%= yeoman.app %>'],
+                    livereload: true,
+                    server: 'app.js'
                 }
             },
             dist: {
                 options: {
-                    base: '<%= yeoman.dist %>',
-                    livereload: false
+                    bases: ['<%= yeoman.dist %>'],
+                    server: 'app.js'
                 }
             }
         },
+        env: {
+            dev: {
+                NODE_ENV: 'development'
+            },
+            dist: {
+                NODE_ENV: 'production'  
+            }
+        },
+        open: {
+            server: {
+                url: 'http://127.0.0.1:<%= express.options.port %>'
+            }
+        },
+        // connect: {
+        //     options: {
+        //         port: 9000,
+        //         // Change this to '0.0.0.0' to access the server from outside.
+        //         hostname: '0.0.0.0',
+        //         livereload: 35729
+        //     },
+        //     livereload: {
+        //         options: {
+        //             open: true,
+        //             base: ['.tmp', '<%= yeoman.app %>']
+        //         }
+        //     },
+        //     test: {
+        //         options: {
+        //             port: 9001,
+        //             base: ['.tmp', 'test', '<%= yeoman.app %>']
+        //         }
+        //     },
+        //     dist: {
+        //         options: {
+        //             base: '<%= yeoman.dist %>',
+        //             livereload: false
+        //         }
+        //     }
+        // },
         clean: {
             dist: {
                 files: [{
@@ -127,32 +149,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        // compass: {
-        //     options: {
-        //         sassDir: '<%= yeoman.app %>/styles',
-        //         cssDir: '.tmp/styles',
-        //         generatedImagesDir: '.tmp/images/generated',
-        //         imagesDir: '<%= yeoman.app %>/images',
-        //         javascriptsDir: '<%= yeoman.app %>/scripts',
-        //         fontsDir: '<%= yeoman.app %>/styles/fonts',
-        //         importPath: '<%= yeoman.app %>/bower_components',
-        //         httpImagesPath: '/images',
-        //         httpGeneratedImagesPath: '/images/generated',
-        //         httpFontsPath: '/styles/fonts',
-        //         relativeAssets: false
-        //     },
-        //     dist: {},
-        //     server: {
-        //         options: {
-        //             debugInfo: true
-        //         }
-        //     }
-        // },
-        // not used since Uglify task does concat,
-        // but still available if needed
-        // concat: {
-        //    dist: {}
-        // },
         rev: {
             dist: {
                 files: {
@@ -251,9 +247,6 @@ module.exports = function(grunt) {
             }
         },
         concurrent: {
-            // server: ['coffee:dist', 'compass:server', 'copy:styles'],
-            // test: ['coffee', 'compass', 'copy:styles'],
-            // dist: ['coffee', 'compass:dist', 'copy:styles', 'imagemin', 'svgmin', 'htmlmin']
             server: ['coffee:dist', 'less', 'copy:styles'],
             test: ['coffee', 'less', 'copy:styles'],
             dist: ['coffee', 'less', 'copy:styles', 'imagemin', 'svgmin', 'htmlmin']
@@ -290,10 +283,12 @@ module.exports = function(grunt) {
 
     grunt.registerTask('server', function(target) {
         if (target === 'dist') {
-            return grunt.task.run(['build', 'connect:dist:keepalive']);
+            return grunt.task.run(['build', 'env:dist', 'express:dist', 'express-keepalive']);
+            // return grunt.task.run(['build', 'connect:dist:keepalive']);
         };
 
-        grunt.task.run(['clean:server', 'concurrent:server', 'autoprefixer', 'connect:livereload', 'watch']);
+        grunt.task.run(['clean:server', 'concurrent:server', 'autoprefixer', 'env:dev', 'express:dev', 'open', 'watch']);
+        // grunt.task.run(['clean:server', 'concurrent:server', 'autoprefixer', 'connect:livereload', 'watch']);
     });
 
     grunt.registerTask('test', ['clean:server', 'concurrent:test', 'autoprefixer', 'connect:test', 'karma']);
