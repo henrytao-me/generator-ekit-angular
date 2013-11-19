@@ -234,11 +234,6 @@ module.exports = function(grunt) {
                 singleRun: true
             }
         },
-        cdnify: {
-            dist: {
-                html: ['<%= yeoman.dist %>/*.html']
-            }
-        },
         ngmin: {
             dist: {
                 files: [{
@@ -268,7 +263,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', ['clean:server', 'concurrent:test', 'autoprefixer', 'connect:test', 'karma']);
 
-    grunt.registerTask('build', ['clean:dist', 'useminPrepare', 'concurrent:dist', 'autoprefixer', 'concat', 'copy:dist', 'cdnify', 'ngmin', 'cssmin', 'uglify', 'rev', 'usemin']);
+    grunt.registerTask('build', ['clean:dist', 'useminPrepare', 'concurrent:dist', 'autoprefixer', 'concat', 'copy:dist', 'ngmin', 'cssmin', 'uglify', 'rev', 'usemin']);
 
     grunt.registerTask('default', ['jshint', 'test', 'build']);
 };
