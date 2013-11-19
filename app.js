@@ -18,7 +18,7 @@ app.configure(function() {
 });
 
 // call backend
-// require('./backend/app.js')(app, server);
+require('./api/app.js')(app, server);
 
 // Development Configuration
 app.configure('development', function() {
@@ -33,7 +33,5 @@ app.configure('production', function() {
 });
 
 module.exports = app;
+// if you want to use socket.io, checkout this link https://npmjs.org/package/grunt-express
 
-// server.listen(app.get('port'), function() {
-//     console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
-// });
